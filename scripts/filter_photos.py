@@ -1,7 +1,8 @@
 import tomllib
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from typing import List, Literal, Optional, Tuple
+from typing import List, Optional, Tuple
+
 import osxphotos
 from geopy.distance import geodesic
 from geopy.geocoders import Nominatim
@@ -85,9 +86,13 @@ class MacPhotosFilter:
     def set_distance_km(self, distance: float) -> None:
         self.max_distance_km = distance
 
-    def filter_media(
-        self, media_type: Literal["all", "photo", "video"] = "all"
-    ) -> List[osxphotos.PhotoInfo]:
+    def filter_media(self, media_type="all"):
+        # Ensure start/end dates are timezone-aware (UTC)
+        if self.start_date.tzinfo is None:
+            self.start_date = self.start_date.replace(tzinfo=timezone.utc)
+        if self.end_date.tzinfo is None:
+            self.end_date = self.end_date.replace(tzinfo=timezone.utc)
+
         media = [
             p
             for p in self.photosdb.photos()
@@ -98,6 +103,7 @@ class MacPhotosFilter:
                 or (media_type == "video" and p.ismovie)
             )
         ]
+
         self.filtered_media = [
             m
             for m in media

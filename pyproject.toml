@@ -10,3 +10,8 @@ dependencies = [
     "osxphotos>=0.72.1",
     "pillow>=11.2.1",
 ]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.1",
+]
