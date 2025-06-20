@@ -1,0 +1,5 @@
+[defaults]
+home_address = "42 Wrights Road, Drummoyne NSW 2047, Australia"
+max_distance_km = 0.2
+default_start_date = "2025-01-01"
+target_latlon = [-33.848803, 151.153135]
